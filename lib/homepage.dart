@@ -10,6 +10,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  TextEditingController addcount = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,10 +25,36 @@ class _HomePageState extends State<HomePage> {
       body: Consumer<CounterProvider>(
         builder: (BuildContext context, value, Widget? child) {
           return Center(
-              child: Text(
-            "${value.count}",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
-          ));
+            child: Column(
+              children: [
+                Text(
+                  "${value.count}",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
+                ),
+                Container(
+                  height: 50,
+                  width: 100,
+                  child: TextFormField(
+                    controller: addcount,
+                    decoration: InputDecoration(border: OutlineInputBorder()),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      var text = addcount.text;
+                      var intVal = int.tryParse(text);
+                      Provider.of<CounterProvider>(context, listen: false)
+                          .addvalue(intVal ?? 0);
+                    },
+                    child: Text(
+                      "OK",
+                    )),
+              ],
+            ),
+          );
         },
       ),
       floatingActionButton: Consumer<CounterProvider>(
